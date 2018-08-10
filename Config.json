@@ -1,0 +1,29 @@
+{
+  "current": "current",
+  "date": "date",
+  "days": "days",
+  "dbName": "mydb",
+  "dni_wstecz": "365",
+  "fulldate": "fulldate",
+  "godziny_wstecz": "1440",
+  "hours": "hours",
+  "ip": "194.181.87.198",
+  "limit": "50",
+  "live": [
+    ["Licznik", "530", "#numero3"],
+    ["Prąd", "536", "#numero4"]
+  ],
+  "minuty_wstecz": "48",
+  "month": "%%M",
+  "port": "8060",
+  "pswd": "ampio",
+  "today": "hours",
+  "user": "admin",
+  "weekDay": "%W",
+  "wykresy": [
+    ["Temperatura", "467", "#numero0", "rgba(255, 0, 52, 0.73)", "rgba(186, 0, 22, 0.75)", "1"],
+    ["Wilgotnosc", "468", "#numero1", "rgba(153, 255, 0, 0.5)", "rgba(65, 204, 0, 0.59)", "10"],
+    ["Cisnienie", "469", "#numero2", "rgba(13, 139, 255, 0.58)", "rgba(74, 81, 255, 0.78)", "1"]
+  ],
+  "year": "%%Y"
+}
