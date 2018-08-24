@@ -28,9 +28,9 @@ var dbActions = {
   importArgs: () => {
     let names = [];
     let ids = [];
-    for (let i = 0; i < Config.wykresy.length; i++) {
-      names.push(Config.wykresy[i][0]);
-      ids.push(Config.wykresy[i][1]);
+    for (let pos in Config.wykresy) {
+      names.push(Config.wykresy[pos].name);
+      ids.push(Config.wykresy[pos].id);
     };
     return {
       name: names,
@@ -45,7 +45,7 @@ var dbActions = {
       let timestamp = new Date(query.date).toMysqlFormat("datePlusOne");
       queryaddon = "WHERE date>='" + query.date + "' AND date<'" + timestamp + "'";
     }
-    con.query("SELECT `" + query.what + "` AS value, DATE_FORMAT(`date`, '" + query.tformat + "') AS time FROM `" + query.where + "` " + queryaddon + "ORDER BY `date` DESC LIMIT " + query.limit,
+    con.query("SELECT * FROM `" + query.where + "` " + queryaddon + "ORDER BY `date` DESC LIMIT " + query.limit,
       (err, rows) => {
         let json = JSON.stringify(rows);
         callback(err, json);
@@ -61,7 +61,7 @@ var dbActions = {
     if (typeof body.List != "undefined") {
       let name = ``;
       let value = ``;
-      for (let i = 0; i < Config.wykresy.length; i++) {
+      for (let i = 0; i < Object.keys(Config.wykresy).length; i++) {
         name += `, \`${Args.name[i]}\``;
         value += `, ${body.List[Args.id[i]].stan}`;
       }
@@ -74,7 +74,7 @@ var dbActions = {
         let value = "";
         const date = key.date;
         //console.log(date);
-        for (let i = 0; i < Config.wykresy.length; i++) {
+        for (let i = 0; i < Object.keys(Config.wykresy).length; i++) {
           name += `, \`${Args.name[i]}\``;
           value += `, ${key[Args.name[i]]}`;
         };
@@ -126,7 +126,7 @@ var dbActions = {
     const con = dbActions.makeConnection();
     let col = "";
     const Args = dbActions.importArgs();
-    for (let i = 0; i < Config.wykresy.length; i++) {
+    for (let i = 0; i < Object.keys(Config.wykresy).length; i++) {
       col += ", AVG(`" + Args.name[i] + "`) AS `" + Args.name[i] + "`";
     }
     switch (caseType) {

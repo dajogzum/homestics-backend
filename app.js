@@ -57,7 +57,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', 4949);
 
 const server = http.listen(app.get('port'), () => {
   debug('Backend server startend on port:  ' + server.address().port);
@@ -70,6 +70,7 @@ var Smiesiac = "";
 var Srok = "";
 
 io.on('connection', (socket) => {
+
   let CFGobj = Config;
   socket.on("save_config", (inputs) => {
     console.log(inputs[9]);
@@ -110,8 +111,14 @@ io.on('connection', (socket) => {
       console.log("Config Reloaded");
     }, 2000);
   });
-  socket.on('Config', (pass) => {
-    pass(Config);
+  socket.on('INIT', (pass) => {
+    dbActions.queryData((err, Result) => {
+      pass(Config, Result);
+    }, {
+      where: "current",
+      limit: 1,
+      date: "xd",
+    }, dbActions.makeConnection());
   });
   socket.on("equations", (EQUA) => {
     CFGobj.equations = EQUA;
@@ -130,7 +137,16 @@ io.on('connection', (socket) => {
 function push() {
   setTimeout(() => {
     console.log(utils.CColors.BgMagenta, utils.CColors.FgWhite, "Wyslano push 'update'", utils.CColors.Reset);
-    io.emit('update', 'updating...');
+    dbActions.queryData((err, Result) => {
+      io.emit('update', Result);
+    }, {
+      what: "Temperatura",
+      tformat: "%H:%i",
+      where: "current",
+      limit: 1,
+      date: "xd",
+    }, dbActions.makeConnection());
+
   }, 1000);
 };
 

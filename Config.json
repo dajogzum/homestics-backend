@@ -20,10 +20,28 @@
   "today": "hours",
   "user": "admin",
   "weekDay": "%W",
-  "wykresy": [
-    ["Temperatura", "467", "#numero0", "rgba(255, 0, 52, 0.73)", "rgba(186, 0, 22, 0.75)", "1"],
-    ["Wilgotnosc", "468", "#numero1", "rgba(153, 255, 0, 0.5)", "rgba(65, 204, 0, 0.59)", "10"],
-    ["Cisnienie", "469", "#numero2", "rgba(13, 139, 255, 0.58)", "rgba(74, 81, 255, 0.78)", "1"]
-  ],
+  "wykresy": {
+    "position0": {
+      "name": "Temperatura",
+      "id": 467,
+      "borderColor": "rgba(255, 0, 52, 0.73)",
+      "fillColor": "rgba(186, 0, 22, 0.75)",
+      "grid": 1
+    },
+    "position1": {
+      "name": "Wilgotnosc",
+      "id": 468,
+      "borderColor": "rgba(153, 255, 0, 0.5)",
+      "fillColor": "rgba(65, 204, 0, 0.59)",
+      "grid": 10
+    },
+    "position2": {
+      "name": "Cisnienie",
+      "id": 469,
+      "borderColor": "rgba(13, 139, 255, 0.78)",
+      "fillColor": "rgba(0, 79, 255, 0.78)",
+      "grid": 1
+    }
+  },
   "year": "%%Y"
 }
