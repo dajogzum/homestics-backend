@@ -72,36 +72,8 @@ var Srok = "";
 io.on('connection', (socket) => {
 
   let CFGobj = Config;
-  socket.on("save_config", (inputs) => {
-    console.log(inputs[9]);
-    console.log(inputs[10]);
-    CFGobj = {
-      //Konfigurowalne:
-      user: inputs[0],
-      pswd: inputs[1],
-      ip: inputs[2],
-      port: inputs[3],
-      dbName: inputs[4],
-      dni_wstecz: inputs[5],
-      godziny_wstecz: inputs[6],
-      minuty_wstecz: inputs[7],
-      limit: inputs[8],
-      wykresy: [],
-      live: [],
-      //Stale:
-      fulldate: "fulldate",
-      date: "date",
-      today: "hours",
-      weekDay: "%W",
-      month: "%%M",
-      year: "%%Y",
-      current: "current",
-      hours: "hours",
-      days: "days"
-    }
-    CFGobj.wykresy = inputs[9];
-    CFGobj.live = inputs[10];
-    fs.writeFileSync('Config.json', JSON.stringify(CFGobj), (err) => {
+  socket.on("SAVECONFIG", (newConfig) => {
+    fs.writeFileSync('Config.json', JSON.stringify(newConfig), (err) => {
       if (err) throw err;
       console.log('Config Saved!');
     });
@@ -111,12 +83,15 @@ io.on('connection', (socket) => {
       console.log("Config Reloaded");
     }, 2000);
   });
+  socket.on('CONFIGONLY', (pass) => {
+    pass(Config);
+  });
   socket.on('INIT', (pass) => {
     dbActions.queryData((err, Result) => {
       pass(Config, Result);
     }, {
       where: "current",
-      limit: 1,
+      limit: Config.limit,
       date: "xd",
     }, dbActions.makeConnection());
   });
@@ -140,13 +115,10 @@ function push() {
     dbActions.queryData((err, Result) => {
       io.emit('update', Result);
     }, {
-      what: "Temperatura",
-      tformat: "%H:%i",
       where: "current",
       limit: 1,
       date: "xd",
     }, dbActions.makeConnection());
-
   }, 1000);
 };
 

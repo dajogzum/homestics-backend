@@ -88,36 +88,34 @@ var dbActions = {
     };
   },
   updates: (callback, errors) => {
-    if (typeof errors != "undefined") {
-      let errCon = errors;
+    if (typeof errors != 'undefined') {
+      var errCon = errors;
     } else {
-      let errCon = 0;
+      var errCon = 0;
     }
-    const con = dbActions.makeConnection();
-    const url = "http://" + Config.user + ":" + Config.pswd + "@" + Config.ip + ":" + Config.port + "/api/json/devices";
-    const urlLog = "http://***:***@" + Config.ip + ":" + Config.port + "/api/json/devices";
+    const url = "http://" + Config.user + ":" + Config.password + "@" + Config.ip + "/api/json/devices";
+    const urlLog = "http://***:***@" + Config.ip + "/api/json/devices";
     console.log(utils.CColors.Bright, "Laczenie z: " + urlLog, utils.CColors.Reset);
     request.get({
       url: url,
       json: true
     }, (err, response, body) => {
       if (!err && response.statusCode === 200) {
+        const con = dbActions.makeConnection();
         dbActions.insertData(body, con);
         callback();
         con.end(() => {
           console.log(utils.CColors.Bright, `Rozlaczono z baza danych`, utils.CColors.Reset)
         })
       } else {
-        console.log(utils.CColorss.FgRed, `Blad podczas pobierania danych\nPonowne laczenie...`, utils.CColors.Reset);
-        con.end();
         if (errCon >= 5) {
           console.log(utils.CColors.FgWhite, utils.CColors.BgRed, `### Nie udalo sie polaczyc! ###`, utils.CColors.Reset);
         } else {
+          console.log(utils.CColors.FgRed, `Blad podczas pobierania danych #${errCon+1}\nPonowne laczenie...`, utils.CColors.Reset);
           setTimeout(() => {
-            dbActions.updates(callback, errCon++);
+            dbActions.updates(callback, (errCon + 1));
           }, 4000);
         }
-
       }
     })
   },
