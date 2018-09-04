@@ -70,7 +70,6 @@ var Smiesiac = "";
 var Srok = "";
 
 io.on('connection', (socket) => {
-
   let CFGobj = Config;
   socket.on("SAVECONFIG", (newConfig) => {
     fs.writeFileSync('Config.json', JSON.stringify(newConfig), (err) => {
@@ -92,7 +91,7 @@ io.on('connection', (socket) => {
     }, {
       where: "current",
       limit: Config.limit,
-      date: "xd",
+      date: "latest",
     }, dbActions.makeConnection());
   });
   socket.on("equations", (EQUA) => {
@@ -107,6 +106,16 @@ io.on('connection', (socket) => {
       console.log("Config Reloaded");
     }, 2000);
   })
+  socket.on("HISTORY", (MODE)=>{
+    console.log("HISTORY: ", MODE);
+    dbActions.queryData((err, Result, MODE) => {
+      io.emit('update', Result);
+    }, {
+      where: MODE,
+      limit: Config.limit,
+      date: "latest",
+    }, dbActions.makeConnection());
+  })
 });
 
 function push() {
@@ -117,7 +126,7 @@ function push() {
     }, {
       where: "current",
       limit: 1,
-      date: "xd",
+      date: "latest",
     }, dbActions.makeConnection());
   }, 1000);
 };

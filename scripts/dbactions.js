@@ -39,7 +39,7 @@ var dbActions = {
   },
   queryData: (callback, query, con) => {
     let queryaddon;
-    if (query.date == "xd") {
+    if (query.date == "latest") {
       queryaddon = '';
     } else {
       let timestamp = new Date(query.date).toMysqlFormat("datePlusOne");
